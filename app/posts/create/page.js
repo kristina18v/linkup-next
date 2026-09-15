@@ -1,0 +1,148 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/Navbar";
+
+export default function CreatePostPage() {
+  const router = useRouter();
+
+  const [content, setContent] = useState("");
+  const [type, setType] = useState("general");
+  const [tags, setTags] = useState("");
+  const [images, setImages] = useState([]);
+
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!content.trim()) {
+      setMessage("Внесете содржина");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("content", content);
+    formData.append("type", type);
+    formData.append("tags", tags);
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    try {
+      const response = await fetch("/api/posts", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message);
+        return;
+      }
+
+      router.push("/posts");
+
+    } catch (error) {
+      setMessage("Настана грешка");
+    }
+  }
+
+  return (
+    <main className="home-layout">
+
+      <Sidebar />
+
+      <section className="home-main">
+
+        <Navbar />
+
+        <div className="create-post-page">
+
+          <h1>Креирај објава</h1>
+
+          <form onSubmit={handleSubmit}>
+
+            <textarea
+              placeholder="Што сакате да споделите?"
+              value={content}
+              onChange={(event) =>
+                setContent(event.target.value)
+              }
+            />
+
+            <select
+              value={type}
+              onChange={(event) =>
+                setType(event.target.value)
+              }
+            >
+
+              <option value="general">
+                Општо
+              </option>
+
+              <option value="project-help">
+                Помош за проект
+              </option>
+
+              <option value="mentoring">
+                Менторство
+              </option>
+
+              <option value="course-promo">
+                Курс
+              </option>
+
+              <option value="internship">
+                Пракса
+              </option>
+
+              <option value="study-group">
+                Група за учење
+              </option>
+
+            </select>
+
+            <input
+              type="text"
+              placeholder="Тагови: react, javascript, mongodb"
+              value={tags}
+              onChange={(event) =>
+                setTags(event.target.value)
+              }
+            />
+
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              onChange={(event) =>
+                setImages(
+                  Array.from(event.target.files)
+                )
+              }
+            />
+
+            <button type="submit">
+              Објави
+            </button>
+
+          </form>
+
+          {message && <p>{message}</p>}
+
+        </div>
+
+      </section>
+
+    </main>
+  );
+}
