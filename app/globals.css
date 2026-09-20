@@ -2814,3 +2814,1049 @@ h3,
   left: 50%;
   transform: translateX(-50%);
 }
+
+/* Clean LinkUp Next visual refresh: styling only. */
+:root {
+  --background: #f7f9f6;
+  --foreground: #10231c;
+  --surface: #ffffff;
+  --surface-soft: #f8faf7;
+  --surface-muted: #eef3ed;
+  --primary: #12372A;
+  --primary-strong: #0b251c;
+  --primary-soft: #eaf2ed;
+  --accent: #C6A15B;
+  --accent-strong: #b99149;
+  --accent-soft: #f7f1e5;
+  --text: #10231c;
+  --text-muted: #65746d;
+  --border: #dde6da;
+  --border-strong: #c8d5c4;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 8px 22px rgba(18, 55, 42, 0.07);
+  --shadow-md: 0 16px 38px rgba(18, 55, 42, 0.1);
+}
+
+body,
+.home-layout,
+.profile-layout,
+.profile-loading,
+.auth-page {
+  color: var(--text);
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7f9f6 100%);
+}
+
+.home-main,
+.profile-main,
+.home-content,
+.feed,
+.posts-page,
+.my-posts-page,
+.courses-page,
+.create-course-page,
+.course-details,
+.tutoring-page,
+.create-tutoring-page,
+.tutoring-details,
+.projects-page,
+.my-projects-page,
+.create-project-page,
+.project-details-page,
+.applications-page,
+.application-details,
+.enrollments-page,
+.enrollment-details,
+.messages-page,
+.chat-page,
+.notifications-page,
+.profile-container {
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+strong,
+.post-content,
+.post-card > p,
+.comment p,
+.notification-content p,
+.other-message .message-bubble {
+  color: var(--text);
+}
+
+p,
+.post-author span,
+.post-author p,
+.chat-user p,
+.conversation-info p,
+.notification-content small,
+.profile-location,
+.profile-stats span,
+.empty-profile-data,
+.roleOption small,
+.auth-heading span {
+  color: var(--text-muted);
+}
+
+input,
+textarea,
+select,
+.navbar-search input {
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+input:hover,
+textarea:hover,
+select:hover,
+.navbar-search input:hover {
+  border-color: var(--border-strong);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.navbar-search input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(18, 55, 42, 0.12);
+}
+
+select {
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--primary) 50%),
+    linear-gradient(135deg, var(--primary) 50%, transparent 50%);
+}
+
+button,
+.posts-heading a,
+.courses-heading a,
+.tutoring-heading a,
+.projects-heading a,
+.applications-list a,
+.enrollments-list a,
+.course-card a,
+.tutoring-card a,
+.project-card a,
+.post-actions a,
+.project-details-page > a,
+.course-details > a,
+.tutoring-details > a,
+.application-details > a,
+.enrollment-details > a,
+.chat-header > a,
+.create-course-button,
+.my-courses-button,
+.create-tutoring-button,
+.my-tutoring-button,
+.course-details-button,
+.tutoring-details-button,
+.edit-course-button,
+.edit-tutoring-button,
+.profile-message-button,
+.message-start-button {
+  color: #ffffff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(18, 55, 42, 0.14);
+}
+
+button:hover,
+.posts-heading a:hover,
+.courses-heading a:hover,
+.tutoring-heading a:hover,
+.projects-heading a:hover,
+.applications-list a:hover,
+.enrollments-list a:hover,
+.course-card a:hover,
+.tutoring-card a:hover,
+.project-card a:hover,
+.post-actions a:hover,
+.project-details-page > a:hover,
+.course-details > a:hover,
+.tutoring-details > a:hover,
+.application-details > a:hover,
+.enrollment-details > a:hover,
+.chat-header > a:hover,
+.create-course-button:hover,
+.my-courses-button:hover,
+.create-tutoring-button:hover,
+.my-tutoring-button:hover,
+.course-details-button:hover,
+.tutoring-details-button:hover,
+.edit-course-button:hover,
+.edit-tutoring-button:hover,
+.profile-message-button:hover,
+.message-start-button:hover {
+  color: #ffffff;
+  background: var(--primary-strong);
+  border-color: var(--primary-strong);
+  box-shadow: 0 12px 24px rgba(18, 55, 42, 0.18);
+}
+
+.post-card,
+.course-card,
+.tutoring-card,
+.project-card,
+.application-card,
+.enrollment-card,
+.project-details,
+.course-info,
+.course-enroll,
+.tutoring-info,
+.tutoring-details section,
+.edit-project,
+.project-apply,
+.application-info,
+.enrollment-info,
+.enrollment-status-form,
+.calendar-card,
+.empty-messages,
+.empty-notifications,
+.notification-card,
+.conversation-card,
+.profile-section,
+.profile-stats,
+.message-people-section,
+.conversations-section,
+.auth-card,
+.empty-courses,
+.empty-tutoring,
+.profile-user-card,
+.message-person-card,
+.create-post-page form,
+.create-course-page form,
+.create-tutoring-page form,
+.create-project-page form,
+.course-form,
+.tutoring-form,
+.message-form,
+.chat-messages,
+.chat-user,
+.profile-header {
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.post-card:hover,
+.course-card:hover,
+.tutoring-card:hover,
+.project-card:hover,
+.application-card:hover,
+.enrollment-card:hover,
+.conversation-card:hover,
+.notification-card:hover,
+.message-person-card:hover,
+.profile-user-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.post-actions span,
+.post-actions button,
+.post-actions a,
+.project-actions a,
+.project-actions button,
+.notification-actions a,
+.notification-actions button,
+.application-actions button,
+.forgot-password a,
+.auth-login-link a {
+  color: var(--primary);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.post-actions button:hover,
+.post-actions a:hover,
+.project-actions a:hover,
+.project-actions button:hover,
+.notification-actions a:hover,
+.notification-actions button:hover,
+.application-actions button:hover,
+.forgot-password a:hover,
+.auth-login-link a:hover {
+  color: var(--primary-strong);
+  background: var(--primary-soft);
+  border-color: rgba(18, 55, 42, 0.18);
+}
+
+.post-tags span,
+.project-skills span,
+.profile-tag,
+.post-type {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-color: rgba(18, 55, 42, 0.12);
+}
+
+.auth-message,
+.notification-message,
+.form-message {
+  color: var(--primary-strong);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  font-weight: 650;
+}
+
+.post-avatar,
+.post-avatar-placeholder,
+.comment-avatar,
+.comment-author img,
+.conversation-image,
+.chat-user img,
+.chat-user span,
+.notification-user-image,
+.profile-image,
+.profile-image-placeholder,
+.profile-user-image,
+.profile-user-placeholder,
+.message-person-image,
+.message-person-image img {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.notification-card.unread {
+  background: linear-gradient(90deg, rgba(18, 55, 42, 0.05), #ffffff 48%);
+  border-color: rgba(18, 55, 42, 0.18);
+}
+
+.notification-icon,
+.empty-notifications span,
+.calendar-title {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid rgba(18, 55, 42, 0.12);
+}
+
+.calendar-card {
+  border-top: 0;
+}
+
+.calendar-day.today,
+.calendar-day.is-today,
+.calendar-day[aria-current="date"] {
+  color: #ffffff;
+  background: var(--primary);
+}
+
+.event-dot,
+.unread-dot {
+  background: var(--accent);
+}
+
+.navbar {
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(18, 55, 42, 0.05);
+}
+
+.create-post-icon,
+.navbar-actions a {
+  color: var(--primary);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.create-post-icon:hover,
+.navbar-actions a:hover {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.sidebar {
+  color: #f7fbf7;
+  background: linear-gradient(180deg, #12372A 0%, #0b251c 100%);
+  border-right-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 14px 0 36px rgba(18, 55, 42, 0.18);
+}
+
+.sidebar-logo span {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a:focus-visible,
+.sidebar-nav a.active,
+.sidebar-nav a[aria-current="page"],
+.sidebar-auth a:hover,
+.sidebar-auth a:focus-visible,
+.sidebar-auth button:hover,
+.sidebar-auth button:focus-visible {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.profile-cover {
+  background: linear-gradient(135deg, #12372A, #0b251c);
+}
+
+.my-message .message-bubble {
+  color: #ffffff;
+  background: var(--primary);
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  padding: clamp(20px, 5vw, 48px);
+  background:
+    radial-gradient(circle at top left, rgba(18, 55, 42, 0.05), transparent 30rem),
+    linear-gradient(180deg, #ffffff 0%, #f7f9f6 100%);
+}
+
+.auth-form-panel {
+  width: min(100%, 430px);
+  gap: 18px;
+  padding: 0;
+}
+
+.auth-register-panel {
+  width: min(100%, 560px);
+  max-width: 560px;
+}
+
+.auth-heading {
+  gap: 8px;
+  text-align: left;
+}
+
+.auth-heading p {
+  width: fit-content;
+  color: var(--primary);
+  background: transparent;
+  border: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0;
+  padding: 0 0 0 10px;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.auth-heading h1 {
+  font-size: clamp(1.9rem, 5vw, 2.45rem);
+  color: var(--primary-strong);
+}
+
+.auth-form {
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(20px, 4vw, 28px);
+  box-shadow: 0 18px 44px rgba(18, 55, 42, 0.1);
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 11px 13px;
+}
+
+.auth-form button {
+  min-height: 44px;
+  margin-top: 2px;
+  border-radius: 10px;
+}
+
+.auth-field-grid {
+  gap: 12px;
+}
+
+.forgot-password {
+  margin-top: -2px;
+}
+
+.forgot-password a,
+.auth-login-link a {
+  min-height: auto;
+  color: var(--primary);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  font-weight: 750;
+  box-shadow: none;
+}
+
+.forgot-password a:hover,
+.auth-login-link a:hover {
+  color: var(--primary-strong);
+  background: transparent;
+  text-decoration: underline;
+}
+
+.auth-login-link {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.rolePicker {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+}
+
+.rolePicker legend {
+  color: var(--primary);
+  padding: 0 7px;
+}
+
+.roleOption {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px;
+}
+
+.roleOption:has(input:checked) {
+  background: var(--primary-soft);
+  border-color: rgba(18, 55, 42, 0.26);
+}
+
+.auth-visual-panel {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .auth-page {
+    align-items: start;
+    padding: 24px 16px;
+  }
+
+  .auth-form-panel,
+  .auth-register-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .auth-form {
+    padding: 18px;
+  }
+
+  .auth-field-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Auth polish and restrained gold accents: styling only. */
+:root {
+  --gold-muted: #C6A15B;
+  --gold-soft: rgba(198, 161, 91, 0.12);
+  --gold-line: rgba(198, 161, 91, 0.34);
+}
+
+.posts-heading h1::after,
+.courses-heading h1::after,
+.tutoring-heading h1::after,
+.projects-heading h1::after,
+.applications-heading h1::after,
+.enrollments-heading h1::after,
+.messages-heading h1::after,
+.notifications-heading h1::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 10px;
+  background: var(--gold-muted);
+  border-radius: 999px;
+}
+
+.post-card,
+.course-card,
+.tutoring-card,
+.project-card,
+.application-card,
+.enrollment-card,
+.notification-card,
+.conversation-card,
+.profile-section,
+.calendar-card {
+  position: relative;
+}
+
+.post-card::before,
+.course-card::before,
+.tutoring-card::before,
+.project-card::before,
+.application-card::before,
+.enrollment-card::before,
+.notification-card.unread::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 7px;
+  height: 7px;
+  background: var(--gold-muted);
+  border-radius: 999px;
+  opacity: 0.62;
+}
+
+.post-card:hover,
+.course-card:hover,
+.tutoring-card:hover,
+.project-card:hover,
+.application-card:hover,
+.enrollment-card:hover,
+.conversation-card:hover,
+.notification-card:hover,
+.message-person-card:hover,
+.profile-user-card:hover {
+  border-color: rgba(18, 55, 42, 0.2);
+  box-shadow: 0 18px 42px rgba(18, 55, 42, 0.11);
+}
+
+.post-card:hover::before,
+.course-card:hover::before,
+.tutoring-card:hover::before,
+.project-card:hover::before,
+.application-card:hover::before,
+.enrollment-card:hover::before {
+  opacity: 1;
+}
+
+.post-tags span,
+.project-skills span,
+.profile-tag,
+.post-type {
+  border-bottom: 2px solid rgba(198, 161, 91, 0.28);
+}
+
+.post-actions button:hover,
+.post-actions a:hover,
+.project-actions a:hover,
+.project-actions button:hover,
+.notification-actions a:hover,
+.notification-actions button:hover,
+.application-actions button:hover,
+.forgot-password a:hover,
+.auth-login-link a:hover {
+  box-shadow: inset 0 -2px 0 rgba(198, 161, 91, 0.28);
+}
+
+.navbar-actions a:hover,
+.create-post-icon:hover {
+  box-shadow: 0 10px 22px rgba(18, 55, 42, 0.16), inset 0 -3px 0 var(--gold-muted);
+}
+
+.calendar-day.has-event::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  background: var(--gold-muted);
+  border-radius: 999px;
+}
+
+.auth-page {
+  grid-template-columns: minmax(340px, 540px) minmax(260px, 360px);
+  gap: 0;
+  align-content: center;
+  align-items: stretch;
+  justify-content: center;
+  padding: clamp(22px, 5vw, 56px);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(198, 161, 91, 0.1), transparent 18rem),
+    radial-gradient(circle at 84% 82%, rgba(18, 55, 42, 0.08), transparent 24rem),
+    linear-gradient(180deg, #ffffff 0%, #f5f8f4 100%);
+}
+
+.auth-form-panel,
+.auth-register-panel {
+  width: 100%;
+  max-width: none;
+  min-height: 560px;
+  justify-content: center;
+  gap: 18px;
+  padding: clamp(28px, 4vw, 44px);
+  background: #ffffff;
+  border: 1px solid rgba(18, 55, 42, 0.1);
+  border-right: 0;
+  border-radius: 22px 0 0 22px;
+  box-shadow: 0 24px 70px rgba(18, 55, 42, 0.13);
+}
+
+.auth-register-panel {
+  min-height: 680px;
+  padding-block: clamp(24px, 3vw, 34px);
+}
+
+.auth-heading {
+  gap: 9px;
+}
+
+.auth-heading p {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 26px;
+  color: var(--primary);
+  border-left: 0;
+  padding: 0;
+  letter-spacing: 0;
+}
+
+.auth-heading p::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--gold-muted);
+  border-radius: 999px;
+}
+
+.auth-heading h1 {
+  color: var(--primary-strong);
+  font-size: clamp(2rem, 4vw, 2.55rem);
+  letter-spacing: 0;
+}
+
+.auth-heading span {
+  max-width: 36rem;
+  font-size: 0.98rem;
+}
+
+.auth-form {
+  gap: 13px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.auth-form input,
+.auth-form select,
+.auth-form textarea {
+  min-height: 46px;
+  background: #fbfcfb;
+  border-color: #dfe8dc;
+}
+
+.auth-form input:focus,
+.auth-form select:focus,
+.auth-form textarea:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(18, 55, 42, 0.11);
+}
+
+.auth-form button {
+  min-height: 46px;
+  margin-top: 4px;
+  background: linear-gradient(180deg, #164532, #12372A);
+  border-color: #12372A;
+  box-shadow: 0 12px 24px rgba(18, 55, 42, 0.2), inset 0 -2px 0 rgba(198, 161, 91, 0.28);
+}
+
+.auth-form button:hover {
+  background: linear-gradient(180deg, #12372A, #0b251c);
+  box-shadow: 0 16px 28px rgba(18, 55, 42, 0.24), inset 0 -2px 0 rgba(198, 161, 91, 0.42);
+}
+
+.auth-field-grid {
+  gap: 12px;
+}
+
+.auth-login-link {
+  margin: 0;
+}
+
+.auth-message {
+  margin: 0;
+  background: #fbfcfb;
+  border-color: #dfe8dc;
+  border-left-color: var(--gold-muted);
+}
+
+.rolePicker {
+  background: #fbfcfb;
+}
+
+.roleOption {
+  background: #ffffff;
+}
+
+.roleOption:has(input:checked) {
+  background: linear-gradient(90deg, rgba(18, 55, 42, 0.06), rgba(198, 161, 91, 0.08));
+  border-color: rgba(18, 55, 42, 0.22);
+  box-shadow: inset 3px 0 0 var(--gold-muted);
+}
+
+.auth-visual-panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 560px;
+  overflow: hidden;
+  padding: clamp(26px, 4vw, 42px);
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(198, 161, 91, 0.18), transparent 8rem),
+    linear-gradient(145deg, #12372A 0%, #0b251c 100%);
+  border: 1px solid rgba(18, 55, 42, 0.1);
+  border-left: 0;
+  border-radius: 0 22px 22px 0;
+  box-shadow: 0 24px 70px rgba(18, 55, 42, 0.13);
+}
+
+.auth-register-page .auth-visual-panel {
+  min-height: 680px;
+}
+
+.auth-visual-panel::before,
+.auth-visual-panel::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.auth-visual-panel::before {
+  width: 210px;
+  height: 210px;
+  right: -86px;
+  top: -64px;
+  background: rgba(198, 161, 91, 0.12);
+  border: 1px solid rgba(198, 161, 91, 0.18);
+}
+
+.auth-visual-panel::after {
+  width: 150px;
+  height: 150px;
+  left: -64px;
+  bottom: -54px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.auth-illustration {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: end;
+  gap: 16px;
+  width: min(100%, 260px);
+  aspect-ratio: auto;
+  min-height: 310px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 42px rgba(0, 0, 0, 0.18);
+}
+
+.auth-illustration::before {
+  content: "LinkUp Next";
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  right: 28px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.auth-illustration::after {
+  content: "";
+  position: absolute;
+  top: 68px;
+  left: 28px;
+  width: 48px;
+  height: 3px;
+  background: var(--gold-muted);
+  border-radius: 999px;
+}
+
+.auth-book,
+.auth-cap,
+.auth-line {
+  position: relative;
+  inset: auto;
+  display: block;
+  transform: none;
+}
+
+.auth-book {
+  width: 82px;
+  height: 82px;
+  margin-top: 96px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.78));
+  border: 0;
+  border-radius: 22px;
+  box-shadow: inset 0 -4px 0 rgba(198, 161, 91, 0.34), 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.auth-book::after {
+  content: "";
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  top: 23px;
+  left: 23px;
+  border: 2px solid rgba(18, 55, 42, 0.28);
+  border-radius: 12px;
+}
+
+.auth-cap {
+  width: 118px;
+  height: 12px;
+  margin-left: 82px;
+  margin-top: -24px;
+  background: var(--gold-muted);
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.auth-line {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+}
+
+.auth-line-one {
+  width: 76%;
+  margin-top: 34px;
+}
+
+.auth-line-two {
+  width: 54%;
+  background: rgba(198, 161, 91, 0.74);
+}
+
+@media (max-width: 860px) {
+  .auth-page {
+    grid-template-columns: minmax(0, 560px);
+    align-items: start;
+    padding: 22px 16px;
+  }
+
+  .auth-visual-panel {
+    grid-row: 1;
+    min-height: 170px;
+    border: 1px solid rgba(18, 55, 42, 0.1);
+    border-bottom: 0;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+  }
+
+  .auth-register-page .auth-visual-panel {
+    min-height: 170px;
+  }
+
+  .auth-form-panel,
+  .auth-register-panel {
+    grid-row: 2;
+    min-height: auto;
+    border: 1px solid rgba(18, 55, 42, 0.1);
+    border-top: 0;
+    border-radius: 0 0 20px 20px;
+    padding: 22px;
+  }
+
+  .auth-illustration {
+    width: 100%;
+    min-height: 128px;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .auth-illustration::before {
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    font-size: 1.12rem;
+  }
+
+  .auth-illustration::after {
+    top: 54px;
+    left: 18px;
+  }
+
+  .auth-book {
+    width: 54px;
+    height: 54px;
+    margin-top: 56px;
+  }
+
+  .auth-book::after {
+    width: 22px;
+    height: 22px;
+    top: 16px;
+    left: 16px;
+    border-radius: 8px;
+  }
+
+  .auth-cap {
+    width: 82px;
+    margin-left: 60px;
+    margin-top: -18px;
+  }
+
+  .auth-line-one,
+  .auth-line-two {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-page {
+    padding: 16px 12px;
+  }
+
+  .auth-form-panel,
+  .auth-register-panel {
+    padding: 18px;
+  }
+
+  .auth-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-heading h1 {
+    font-size: 1.85rem;
+  }
+
+  .post-card::before,
+  .course-card::before,
+  .tutoring-card::before,
+  .project-card::before,
+  .application-card::before,
+  .enrollment-card::before,
+  .notification-card.unread::before {
+    display: none;
+  }
+}

@@ -1,6 +1,7 @@
 import User from "@/models/User";
 import connectDB from "@/lib/mongodb";
 import sendEmail from "@/lib/sendEmail";
+import { welcomeEmailTemplate } from "@/lib/emailTemplates";
 
 // POST /api/auth/register
 export async function POST(request) {
@@ -37,17 +38,18 @@ export async function POST(request) {
       role,
     });
 
-  await sendEmail({
+console.log("Ќе испратам welcome email до:", newUser.email);
+
+await sendEmail({
   options: {
     to: newUser.email,
-    subject: "Успешна регистрација на LinkUp",
-    text: `Здраво ${newUser.name}, успешно се регистриравте на LinkUp.`,
-    html: `
-      <h2>Здраво ${newUser.name}</h2>
-      <p>Успешно се регистриравте на LinkUp.</p>
-    `,
+    subject: "Добредојдовте на LinkUp Next",
+    text: `Здраво ${newUser.name}, успешно се регистриравте на LinkUp Next.`,
+    html: welcomeEmailTemplate({ name: newUser.name }),
   },
 });
+
+console.log("Welcome email е испратен");
 
     return Response.json(
       {

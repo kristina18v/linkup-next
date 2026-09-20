@@ -52,8 +52,8 @@ export default function ProjectDetailsPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setUser(data);
-      })
+  setUser(data.user);
+})
       .catch((error) => {
         console.log(error);
       });

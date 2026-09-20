@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import PaymentButton from "@/components/PaymentButton";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -157,6 +158,16 @@ export default function TutoringDetailsPage() {
             </p>
 
           </div>
+
+           {/* STRIPE PAYMENT */}
+         {user &&
+           tutoring.mentor?._id !== user._id && (
+            <PaymentButton
+            itemId={tutoring._id}
+              type="tutoring"
+             />
+             )}
+
 
 
           {/* AVAILABLE DATES */}

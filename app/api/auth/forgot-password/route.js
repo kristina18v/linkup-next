@@ -1,6 +1,7 @@
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
 import sendEmail from "@/lib/sendEmail";
+import { resetPasswordEmailTemplate } from "@/lib/emailTemplates";
 import crypto from "crypto";
 // POST / api/auth/api
 export async function POST(request) {
@@ -54,7 +55,7 @@ export async function POST(request) {
     // 7. Линк што ќе го добие корисникот на email
      const origin = new URL(request.url).origin;
 
-     const resetUrl = `${origin}/reset-password?token=${resetToken}`;
+     const resetUrl = `${origin}/auth/reset-password/${resetToken}`;
 
     // 8. Испрати email
    await sendEmail({
@@ -62,16 +63,7 @@ export async function POST(request) {
     to: user.email,
     subject: "Промена на лозинка",
     text: `Кликнете на овој линк за да ја промените лозинката: ${resetUrl}`,
-    html: `
-      <h2>Промена на лозинка</h2>
-      <p>Кликнете на линкот подолу за да поставите нова лозинка:</p>
-
-      <a href="${resetUrl}">
-        Промени лозинка
-      </a>
-
-      <p>Линкот важи 15 минути.</p>
-    `,
+    html: resetPasswordEmailTemplate({ resetUrl }),
   },
 });
 
