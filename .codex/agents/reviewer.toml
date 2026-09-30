@@ -1,0 +1,11 @@
+name = "reviewer"
+description = "Go porveruva kodot i kvalitetot na testovite"
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Prociraj go AGENTS.md, kodot i testovi
+Ne menuvaj aplikaciski fajlovi ili testovi
+Izvrihsigi dostapnite proverki.
+Prijavi commit SHA, koamandi, rezultati i propusti so file:line
+Ne pravi merge ili deploy
+
+"""

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import Icon from "@/components/Icon";
 
 export default function CreatePostPage() {
   const router = useRouter();
@@ -55,6 +56,12 @@ export default function CreatePostPage() {
     }
   }
 
+  function removeImage(indexToRemove) {
+    setImages(
+      images.filter((image, index) => index !== indexToRemove)
+    );
+  }
+
   return (
     <main className="home-layout">
 
@@ -66,78 +73,151 @@ export default function CreatePostPage() {
 
         <div className="create-post-page">
 
-          <h1>Креирај објава</h1>
+          <div className="create-post-panel-heading">
+            <h1>Креирај објава</h1>
+          </div>
 
-          <form onSubmit={handleSubmit}>
+          <form
+            className="create-post-form"
+            onSubmit={handleSubmit}
+          >
 
-            <textarea
-              placeholder="Што сакате да споделите?"
-              value={content}
-              onChange={(event) =>
-                setContent(event.target.value)
-              }
-            />
+            <label className="create-post-field create-post-content-field">
+              <span>Содржина</span>
 
-            <select
-              value={type}
-              onChange={(event) =>
-                setType(event.target.value)
-              }
+              <textarea
+                placeholder="Што сакате да споделите?"
+                value={content}
+                onChange={(event) =>
+                  setContent(event.target.value)
+                }
+              />
+            </label>
+
+            <div className="create-post-field-grid">
+
+              <label className="create-post-field">
+                <span>Тип на објава</span>
+
+                <select
+                  value={type}
+                  onChange={(event) =>
+                    setType(event.target.value)
+                  }
+                >
+
+                  <option value="general">
+                    Општо
+                  </option>
+
+                  <option value="project-help">
+                    Помош за проект
+                  </option>
+
+                  <option value="mentoring">
+                    Менторство
+                  </option>
+
+                  <option value="course-promo">
+                    Курс
+                  </option>
+
+                  <option value="internship">
+                    Пракса
+                  </option>
+
+                  <option value="study-group">
+                    Група за учење
+                  </option>
+
+                </select>
+              </label>
+
+              <label className="create-post-field">
+                <span>Тагови</span>
+
+                <input
+                  type="text"
+                  placeholder="react, javascript, mongodb"
+                  value={tags}
+                  onChange={(event) =>
+                    setTags(event.target.value)
+                  }
+                />
+              </label>
+
+            </div>
+
+            {/* IMAGE UPLOAD */}
+            <label className="create-post-upload">
+
+              <span className="create-post-upload-icon">
+                <Icon name="image" />
+              </span>
+
+              <span className="create-post-upload-copy">
+                <strong>Додај фотографии</strong>
+                <small>JPG, PNG или WebP</small>
+              </span>
+
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={(event) =>
+                  setImages(
+                    Array.from(event.target.files)
+                  )
+                }
+              />
+
+            </label>
+
+            {/* IMAGE PREVIEW */}
+            {images.length > 0 && (
+              <div className="create-post-previews">
+
+                {images.map((image, index) => (
+
+                  <div
+                    className="create-post-preview"
+                    key={`${image.name}-${index}`}
+                  >
+
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="Преглед"
+                    />
+
+                    <button
+                      type="button"
+                      className="create-post-preview-remove"
+                      onClick={() => removeImage(index)}
+                    >
+                      ×
+                    </button>
+
+                  </div>
+
+                ))}
+
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="create-post-submit"
             >
-
-              <option value="general">
-                Општо
-              </option>
-
-              <option value="project-help">
-                Помош за проект
-              </option>
-
-              <option value="mentoring">
-                Менторство
-              </option>
-
-              <option value="course-promo">
-                Курс
-              </option>
-
-              <option value="internship">
-                Пракса
-              </option>
-
-              <option value="study-group">
-                Група за учење
-              </option>
-
-            </select>
-
-            <input
-              type="text"
-              placeholder="Тагови: react, javascript, mongodb"
-              value={tags}
-              onChange={(event) =>
-                setTags(event.target.value)
-              }
-            />
-
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              multiple
-              onChange={(event) =>
-                setImages(
-                  Array.from(event.target.files)
-                )
-              }
-            />
-
-            <button type="submit">
               Објави
             </button>
 
           </form>
 
-          {message && <p>{message}</p>}
+          {message && (
+            <p className="form-message">
+              {message}
+            </p>
+          )}
 
         </div>
 

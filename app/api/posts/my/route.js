@@ -19,7 +19,7 @@ export async function GET(request) {
       author: user._id,
     })
       .sort({ createdAt: -1 })
-      .populate("author", "name surname role");
+      .populate("author", "name surname role profileImage");
 
     return Response.json(myPosts, {
       status: 200,

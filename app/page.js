@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -310,55 +311,95 @@ export default function HomePage() {
     }
   }
 
-  return (
-    <main className="home-layout">
+  function getInitials(person) {
+    return `${person?.name?.charAt(0) || ""}${person?.surname?.charAt(0) || ""}`;
+  }
 
+  function formatPostDate(date) {
+    if (!date) {
+      return "Сега";
+    }
+
+    return new Date(date).toLocaleDateString("mk-MK", {
+      day: "numeric",
+      month: "short",
+    });
+  }
+
+  return (
+    <main className="home-layout app-shell-v2">
       <Sidebar user={user} />
 
-      <section className="home-main">
-
+      <section className="home-main social-main-v2">
         <Navbar user={user} />
 
-        <div className="home-content">
+        <div className="home-content social-home-grid">
+          <section className="feed social-feed-v2">
 
-          {/* FEED */}
-          <section className="feed">
+            <div className="home-feed-intro">
+              <div>
+                <span>Feed</span>
+                <strong>{posts.length} активни разговори</strong>
+              </div>
 
-            {/* CREATE POST */}
+              <nav className="home-topic-strip" aria-label="Брзи секции">
+                <Link href="/courses"><Icon name="course" /> Курсеви</Link>
+                <Link href="/tutoring"><Icon name="calendar" /> Ментори</Link>
+                <Link href="/project-requests"><Icon name="briefcase" /> Проекти</Link>
+                <Link href="/messages"><Icon name="message" /> Пораки</Link>
+              </nav>
+            </div>
             {user && (
-              <a
-                href="/posts/create"
-                className="create-post-button"
-              >
-                <Icon name="plus" /> Креирај објава
-              </a>
+              <section className="post-composer-v2">
+                <div className="composer-avatar-v2">
+                  {user.profileImage ? (
+                    <img
+                      src={`/uploads/${user.profileImage}`}
+                      alt="Профил"
+                    />
+                  ) : (
+                    <span>{getInitials(user) || "LN"}</span>
+                  )}
+                </div>
+
+                <Link href="/posts/create" className="composer-input-v2">
+                  Започни разговор, прашање или идеја...
+                </Link>
+
+                <div className="composer-actions-v2">
+                  <Link href="/posts/create" title="Креирај објава">
+                    <Icon name="plus" />
+                    Објава
+                  </Link>
+
+                  <Link href="/posts/create" title="Додај слика">
+                    <Icon name="image" />
+                    Слика
+                  </Link>
+                </div>
+              </section>
             )}
 
-            {/* LOADING */}
             {loading && (
-              <p>Се вчитува...</p>
+              <div className="feed-state-v2">
+                <span></span>
+                <p>Се вчитува feed-от...</p>
+              </div>
             )}
 
-            {/* NO POSTS */}
             {!loading && posts.length === 0 && (
-              <p>Нема објави.</p>
+              <div className="feed-state-v2 empty-feed-v2">
+                <span><Icon name="comment" /></span>
+                <h2>Нема објави</h2>
+                <p>Креирај ја првата дискусија во LinkUp Next.</p>
+              </div>
             )}
 
-            {/* POSTS */}
-            <div className="posts">
-
+            <div className="posts social-post-stack-v2">
               {posts.map((post) => (
-                <article
-                  className="post-card"
-                  key={post._id}
-                >
-
-                  {/* AUTHOR */}
-                  <div className="post-author">
-
-                    <div className="post-author-info">
-
-                      {/* PROFILE IMAGE */}
+                <article className="post-card social-post-card-v2" key={post._id}>
+                  <header className="post-author social-post-header-v2">
+                    <div className="post-author-info social-author-v2">
                       {post.author?.profileImage ? (
                         <img
                           className="post-avatar"
@@ -367,80 +408,60 @@ export default function HomePage() {
                         />
                       ) : (
                         <div className="post-avatar-placeholder">
-                          <Icon name="profile" />
+                          {getInitials(post.author) || <Icon name="profile" />}
                         </div>
                       )}
 
-                      <div>
+                      <div className="social-author-copy-v2">
                         <strong>
-                          {post.author?.name}{" "}
-                          {post.author?.surname}
+                          {post.author?.name} {post.author?.surname}
                         </strong>
 
                         <span>
-                          {post.author?.role}
+                          {post.author?.role || "LinkUp член"} · {formatPostDate(post.createdAt)}
                         </span>
                       </div>
-
                     </div>
 
-                    {/* FOLLOW */}
-                    {user &&
-                      post.author?._id &&
-                      post.author._id !== user._id && (
+                    <div className="post-header-actions-v2">
+                      {user &&
+                        post.author?._id &&
+                        post.author._id !== user._id && (
+                          <button
+                            type="button"
+                            className="follow-button"
+                            onClick={() => handleFollow(post.author._id)}
+                          >
+                            {following.includes(post.author._id)
+                              ? "Следиш"
+                              : "Следи"}
+                          </button>
+                        )}
 
-                        <button
-                          type="button"
-                          className="follow-button"
-                          onClick={() =>
-                            handleFollow(
-                              post.author._id
-                            )
-                          }
-                        >
-                          {following.includes(
-                            post.author._id
-                          )
-                            ? "Следиш ✓"
-                            : "+ Следи"}
-                        </button>
+                      <button type="button" className="post-menu-v2" aria-label="Повеќе опции">
+                        •••
+                      </button>
+                    </div>
+                  </header>
 
-                      )}
-
-                  </div>
-
-                  {/* POST TYPE */}
-                  {post.type &&
-                    post.type !== "general" && (
-                      <span className="post-type">
-                        {post.type}
-                      </span>
+                  <div className="post-body-v2">
+                    {post.type && post.type !== "general" && (
+                      <span className="post-type">{post.type}</span>
                     )}
 
-                  {/* POST CONTENT */}
-                  <p className="post-content">
-                    {post.content}
-                  </p>
+                    <p className="post-content">{post.content}</p>
 
-                  {/* TAGS */}
-                  {post.tags?.length > 0 && (
-                    <div className="post-tags">
+                    {post.tags?.length > 0 && (
+                      <div className="post-tags">
+                        {post.tags.map((tag, index) => (
+                          <span key={index}>#{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                      {post.tags.map(
-                        (tag, index) => (
-                          <span key={index}>
-                            #{tag}
-                          </span>
-                        )
-                      )}
-
-                    </div>
-                  )}
-
-                  {/* IMAGES */}
                   {post.images?.length > 0 && (
-                    <div className="post-images">
-
+                    <div className="post-images social-post-gallery-v2">
                       {post.images.map((image) => (
                         <img
                           key={image}
@@ -448,134 +469,75 @@ export default function HomePage() {
                           alt="Објава"
                         />
                       ))}
-
                     </div>
                   )}
 
-                  {/* POST STATS */}
-            {/* POST STATS */}
-           <div className="post-stats">
-             <span>
-              <Icon name="heart" /> {post.likes?.length || 0} допаѓања
-             </span>
-               </div>
+                  <div className="post-stats social-post-stats-v2">
+                    <span>
+                      <Icon name="heart" /> {post.likes?.length || 0} допаѓања
+                    </span>
 
-                  {/* ACTIONS */}
-                  <div className="post-actions">
+                    <span>
+                      {(comments[post._id] || []).length} коментари
+                    </span>
+                  </div>
 
-                    {/* LIKE */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleLike(post._id)
-                      }
-                    >
+                  <div className="post-actions social-toolbar-v2">
+                    <button type="button" onClick={() => handleLike(post._id)}>
                       <Icon name="heart" /> Like
                     </button>
 
-                    {/* COMMENT */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleOpenComments(
-                          post._id
-                        )
-                      }
-                    >
+                    <button type="button" onClick={() => handleOpenComments(post._id)}>
                       <Icon name="comment" /> Коментар
                     </button>
 
-                    {/* SHARE */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleShare(post._id)
-                      }
-                    >
+                    <button type="button" onClick={() => handleShare(post._id)}>
                       <Icon name="share" /> Сподели
                     </button>
 
-                    {/* SAVE */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleSave(post._id)
-                      }
-                    >
+                    <button type="button" onClick={() => handleSave(post._id)}>
                       <Icon name="bookmark" /> {savedPosts.includes(post._id) ? "Зачувано" : "Зачувај"}
                     </button>
-
                   </div>
 
-                  {/* COMMENTS */}
                   {openComments === post._id && (
-
-                    <div className="comments-section">
-
+                    <div className="comments-section social-comments-v2">
                       <div className="comments-list">
-
-                        {(comments[post._id] || [])
-                          .length === 0 && (
-                          <p>
-                            Сè уште нема коментари.
-                          </p>
+                        {(comments[post._id] || []).length === 0 && (
+                          <p>Сè уште нема коментари.</p>
                         )}
 
-                        {(comments[post._id] || []).map(
-                          (comment) => (
+                        {(comments[post._id] || []).map((comment) => (
+                          <div className="comment" key={comment._id}>
+                            <div className="comment-author">
+                              {comment.author?.profileImage ? (
+                                <img
+                                  src={`/uploads/${comment.author.profileImage}`}
+                                  alt="Профил"
+                                />
+                              ) : (
+                                <div className="comment-avatar">
+                                  {getInitials(comment.author) || <Icon name="profile" />}
+                                </div>
+                              )}
 
-                            <div
-                              className="comment"
-                              key={comment._id}
-                            >
-
-                              <div className="comment-author">
-
-                                {comment.author
-                                  ?.profileImage ? (
-
-                                  <img
-                                    src={`/uploads/${comment.author.profileImage}`}
-                                    alt="Профил"
-                                  />
-
-                                ) : (
-                                  <div className="comment-avatar">
-                                    <Icon name="profile" />
-                                  </div>
-                                )}
-
-                                <strong>
-                                  {comment.author?.name}{" "}
-                                  {comment.author?.surname}
-                                </strong>
-
-                              </div>
-
-                              <p>
-                                {comment.content}
-                              </p>
-
+                              <strong>
+                                {comment.author?.name} {comment.author?.surname}
+                              </strong>
                             </div>
 
-                          )
-                        )}
-
+                            <p>{comment.content}</p>
+                          </div>
+                        ))}
                       </div>
 
-                      {/* ADD COMMENT */}
                       {user && (
-
                         <div className="comment-form">
-
                           {user.profileImage ? (
-                            <img
-                              src={`/uploads/${user.profileImage}`}
-                              alt="Профил"
-                            />
+                            <img src={`/uploads/${user.profileImage}`} alt="Профил" />
                           ) : (
                             <div className="comment-avatar">
-                              <Icon name="profile" />
+                              {getInitials(user) || <Icon name="profile" />}
                             </div>
                           )}
 
@@ -583,48 +545,67 @@ export default function HomePage() {
                             type="text"
                             placeholder="Напиши коментар..."
                             value={commentText}
-                            onChange={(event) =>
-                              setCommentText(
-                                event.target.value
-                              )
-                            }
+                            onChange={(event) => setCommentText(event.target.value)}
                           />
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleComment(
-                                post._id
-                              )
-                            }
-                          >
+                          <button type="button" onClick={() => handleComment(post._id)}>
                             Испрати
                           </button>
-
                         </div>
-
                       )}
-
                     </div>
-
                   )}
-
                 </article>
               ))}
-
             </div>
-
           </section>
 
-          {/* RIGHT SIDE CALENDAR */}
           {user && (
-            <Calendar user={user} />
+            <aside className="home-right-column social-right-rail-v2">
+              <section className="rail-profile-card-v2">
+                <div className="rail-profile-avatar-v2">
+                  {user.profileImage ? (
+                    <img src={`/uploads/${user.profileImage}`} alt="Профил" />
+                  ) : (
+                    <span>{getInitials(user) || "LN"}</span>
+                  )}
+                </div>
+
+                <div>
+                  <strong>{user.name} {user.surname}</strong>
+                  <p>{user.role}</p>
+                </div>
+
+                <Link href="/profile">Профил</Link>
+              </section>
+
+              <Calendar user={user} />
+
+              <section className="rail-card-v2 learning-pulse-v2">
+                <span><Icon name="course" /></span>
+                <div>
+                  <h2>Learning pulse</h2>
+                  <p>Пронајди курс, приклучи се на проект или започни разговор со ментор.</p>
+                </div>
+              </section>
+
+              <section className="rail-card-v2 rail-links-v2">
+                <Link href="/courses">
+                  <Icon name="course" /> Курсеви
+                </Link>
+
+                <Link href="/project-requests">
+                  <Icon name="briefcase" /> Проекти
+                </Link>
+
+                <Link href="/messages">
+                  <Icon name="message" /> Пораки
+                </Link>
+              </section>
+            </aside>
           )}
-
         </div>
-
       </section>
-
     </main>
   );
 }

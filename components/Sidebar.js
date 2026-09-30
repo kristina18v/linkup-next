@@ -1,71 +1,65 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
 import Icon from "@/components/Icon";
 
-export default function Sidebar() {
-  return (
-    <aside className="sidebar">
+const primaryLinks = [
+  { href: "/", label: "Почетна", icon: "home" },
+  { href: "/courses", label: "Курсеви", icon: "course" },
+  { href: "/tutoring", label: "Ментори", icon: "calendar" },
+  { href: "/project-requests", label: "Проекти", icon: "briefcase" },
+  { href: "/project-applications", label: "Апликации", icon: "application" },
+  { href: "/internships", label: "Пракси", icon: "building" },
+];
 
-      <Link href="/" className="sidebar-logo">
+export default function Sidebar() {
+  const pathname = usePathname();
+
+  function getLinkClass(href) {
+    if (href === "/") {
+      return pathname === href ? "active" : undefined;
+    }
+
+    return pathname?.startsWith(href) ? "active" : undefined;
+  }
+
+  return (
+    <aside className="sidebar shell-rail" aria-label="Главна навигација">
+      <Link href="/" className="sidebar-logo shell-rail-logo" title="LinkUp Next">
         <span><Icon name="linkup" /></span>
-        LinkUp Next
+        <strong>LinkUp</strong>
       </Link>
 
-      <nav className="sidebar-nav">
-
-        <Link href="/">
-          <Icon name="home" />
-          Почетна
-        </Link>
-
-        <Link href="/courses">
-          <Icon name="course" />
-          Курсеви
-        </Link>
-
-        <Link href="/tutoring">
-          <Icon name="calendar" />
-          Спремање / часови
-        </Link>
-
-        <Link href="/project-requests">
-          <Icon name="briefcase" />
-          Проектни барања
-        </Link>
-
-        <Link href="/project-applications">
-          <Icon name="application" />
-          Проектни апликации
-        </Link>
-
-        <Link href="/internships">
-          <Icon name="building" />
-          Пракси
-        </Link>
-
-        <Link href="/messages">
-          <Icon name="message" />
-          Пораки
-        </Link>
-
+      <nav className="sidebar-nav shell-rail-nav">
+        {primaryLinks.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={getLinkClass(item.href)}
+            title={item.label}
+            aria-label={item.label}
+          >
+            <Icon name={item.icon} />
+            <span>{item.label}</span>
+          </Link>
+        ))}
       </nav>
 
-      <div className="sidebar-auth">
-
-        <Link href="/auth/login">
-          Логин
+      <div className="sidebar-auth shell-rail-auth">
+        <Link href="/auth/login" title="Логин" aria-label="Логин">
+          <Icon name="profile" />
+          <span>Логин</span>
         </Link>
 
-        <Link href="/auth/register">
-          Регистер
+        <Link href="/auth/register" title="Регистер" aria-label="Регистер">
+          <Icon name="plus" />
+          <span>Регистер</span>
         </Link>
 
         <LogoutButton />
-
       </div>
-
     </aside>
   );
 }

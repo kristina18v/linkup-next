@@ -35,7 +35,7 @@ export default function Calendar() {
           projectsResponse,
           internshipsResponse,
         ] = await Promise.all([
-          fetch("/api/courses", {
+          fetch("/api/courses?limit=1000", {
             credentials: "include",
           }),
 
@@ -52,7 +52,10 @@ export default function Calendar() {
           }),
         ]);
 
-        const courses = await coursesResponse.json();
+        const coursesData = await coursesResponse.json();
+        const courses = Array.isArray(coursesData)
+          ? coursesData
+          : coursesData.courses || [];
         const tutoring = await tutoringResponse.json();
         const projects = await projectsResponse.json();
         const internships = await internshipsResponse.json();

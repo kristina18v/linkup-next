@@ -46,7 +46,7 @@ export async function POST(request) {
         { status: 404 }
       );
     }
-
+      
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
 

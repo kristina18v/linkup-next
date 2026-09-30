@@ -2,6 +2,7 @@ import connectDB from "@/lib/mongodb";
 import Course from "@/models/Course";
 import { protect } from "@/lib/auth";
 import { saveImage } from "@/lib/uploadImages";
+import qs from "qs";
 
 // GET /api/courses
 export async function GET(request) {
@@ -15,13 +16,59 @@ export async function GET(request) {
       );
     }
 
+    // Ги земаме query параметрите од URL
+    const queryObj = qs.parse(
+      request.nextUrl.searchParams.toString()
+    );
+
+    // Која страница ја бараме
+    const page = Math.max(
+      1,
+      parseInt(queryObj.page) || 1
+    );
+
+    // Колку курсеви по страница
+    const limit = Math.max(
+      1,
+      parseInt(queryObj.limit) || 10
+    );
+
+    // Ги бришеме бидејќи page и limit  не се полиња од Course
+    delete queryObj.page;
+    delete queryObj.limit;
+
+    // Колку курсеви да прескокнеме
+    const skip = (page - 1) * limit;
+
+    let queryString = JSON.stringify(queryObj);
+
+    queryString = queryString.replace(
+      /"(gte|gt|lte|lt)"/g,
+      (match, operator) => `"$${operator}"`
+    );
+
+    const filters = JSON.parse(queryString);
+
     await connectDB();
 
-    const courses = await Course.find()
-      .populate("instructor", "name surname role")
-      .sort({ createdAt: -1 });
+    const totalCourses = await Course.countDocuments(filters);
+    const totalPages = Math.ceil(totalCourses / limit);
 
-    return Response.json(courses, { status: 200 });
+    const courses = await Course.find(filters)
+      .populate("instructor", "name surname role")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    return Response.json(
+      {
+        courses,
+        page,
+        totalPages,
+      },
+      { status: 200 }
+    );
+
   } catch (error) {
     return Response.json(
       { message: error.message },
@@ -29,7 +76,6 @@ export async function GET(request) {
     );
   }
 }
-
 // POST /api/courses
 export async function POST(request) {
   try {

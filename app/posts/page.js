@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import Icon from "@/components/Icon";
 
 export default function PostsPage() {
   const [user, setUser] = useState(null);
@@ -150,12 +151,16 @@ export default function PostsPage() {
               >
 
                 <div className="post-author">
-
-                  {post.author?.profileImage && (
+                  {post.author?.profileImage ? (
                     <img
+                      className="post-avatar"
                       src={`/uploads/${post.author.profileImage}`}
-                      alt="Profile"
+                      alt="Профил"
                     />
+                  ) : (
+                    <div className="post-avatar-placeholder">
+                      <Icon name="profile" />
+                    </div>
                   )}
 
                   <div>
@@ -241,3 +246,5 @@ export default function PostsPage() {
     </main>
   );
 }
+
+

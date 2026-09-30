@@ -30,7 +30,7 @@ export default function MyCoursesPage() {
         setUser(currentUser);
 
         // GET ALL COURSES
-        const coursesResponse = await fetch("/api/courses", {
+        const coursesResponse = await fetch("/api/courses?limit=1000", {
           credentials: "include",
         });
 
@@ -40,8 +40,12 @@ export default function MyCoursesPage() {
           throw new Error(coursesData.message);
         }
 
+        const allCourses = Array.isArray(coursesData)
+          ? coursesData
+          : coursesData.courses || [];
+
         // Само курсевите на најавениот корисник
-        const myCourses = coursesData.filter(
+        const myCourses = allCourses.filter(
           (course) =>
             course.instructor?._id === currentUser._id
         );
