@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
+import Icon from "@/components/Icon";
 
 export default function MessagesPage() {
   const [user, setUser] = useState(null);
@@ -29,6 +30,7 @@ export default function MessagesPage() {
 
         return data;
       })
+      //Кога ќе ги добиеме податоците (data), го земаме корисникот data.user и го зачувуваме во state преку setUser()
       .then((data) => {
         setUser(data.user);
       })
@@ -78,9 +80,9 @@ export default function MessagesPage() {
   }
 
 
-  // =========================
+
   // FOLLOWERS + FOLLOWING
-  // =========================
+
 
   const allPeople = [
     ...(user?.followers || []),
@@ -98,9 +100,8 @@ export default function MessagesPage() {
   );
 
 
-  // =========================
   // EXISTING CONVERSATIONS
-  // =========================
+  
 
   const conversations = [];
 
@@ -141,197 +142,134 @@ export default function MessagesPage() {
 
         <Navbar user={user} />
 
-        <div className="messages-page">
+        <div className="messages-page messages-app-page">
 
-          <div className="messages-heading">
+          <div className="messages-shell">
 
-            <h1>Пораки</h1>
+            <aside className="messages-sidebar">
 
-            <p>
-              Изберете корисник и започнете разговор.
-            </p>
+              <div className="messages-sidebar-header">
+                <h1>Пораки</h1>
 
-          </div>
-
-
-          {/* ===================== */}
-          {/* PEOPLE */}
-          {/* ===================== */}
-
-          <section className="message-people-section">
-
-            <h2>Луѓе</h2>
-
-            <p>
-              Корисници што ги следите или ве следат.
-            </p>
-
-
-            {people.length === 0 && (
-
-              <div className="empty-messages">
-
-                <h3>
-                  Нема корисници
-                </h3>
-
-                <p>
-                  Кога ќе следите некого или некој
-                  ќе ве следи, ќе се прикаже тука.
-                </p>
-
+                <div className="message-search">
+                  <Icon name="search" />
+                  <input
+                    type="text"
+                    placeholder="Пребарај разговор"
+                  />
+                </div>
               </div>
 
-            )}
+              {people.length > 0 && (
+                <section className="message-people-section">
+                  <h2>Нов разговор</h2>
 
+                  <div className="message-people-list">
+                    {people.map((person) => (
+                      <Link
+                        href={`/messages/${person._id}`}
+                        key={person._id}
+                        className="message-person-card"
+                        title={`${person.name} ${person.surname}`}
+                      >
+                        <div className="message-person-image">
+                          {person.profileImage ? (
+                            <img
+                              src={`/uploads/${person.profileImage}`}
+                              alt={`${person.name} ${person.surname}`}
+                            />
+                          ) : (
+                            <span>
+                              {person.name?.charAt(0)}{person.surname?.charAt(0)}
+                            </span>
+                          )}
+                        </div>
 
-            <div className="message-people-list">
-
-              {people.map((person) => (
-
-                <Link
-                  href={`/messages/${person._id}`}
-                  key={person._id}
-                  className="message-person-card"
-                >
-
-                  {/* IMAGE */}
-                  <div className="message-person-image">
-
-                    {person.profileImage ? (
-
-                      <img
-                        src={`/uploads/${person.profileImage}`}
-                        alt={`${person.name} ${person.surname}`}
-                      />
-
-                    ) : (
-
-                      <span>
-                        👤
-                      </span>
-
-                    )}
-
-                  </div>
-
-
-                  {/* USER */}
-                  <div className="message-person-info">
-
-                    <strong>
-                      {person.name}{" "}
-                      {person.surname}
-                    </strong>
-
-                    <span>
-                      {person.role}
-                    </span>
-
-                  </div>
-
-
-                  <span className="message-start-button">
-                    Порака →
-                  </span>
-
-                </Link>
-
-              ))}
-
-            </div>
-
-          </section>
-
-
-          {/* ===================== */}
-          {/* CONVERSATIONS */}
-          {/* ===================== */}
-
-          <section className="conversations-section">
-
-            <h2>
-              Разговори
-            </h2>
-
-
-            {conversations.length === 0 && (
-
-              <div className="empty-messages">
-
-                <h3>
-                  Немате започнати разговори
-                </h3>
-
-                <p>
-                  Изберете корисник од листата
-                  погоре за да започнете разговор.
-                </p>
-
-              </div>
-
-            )}
-
-
-            <div className="conversations-list">
-
-              {conversations.map(
-                (conversation) => (
-
-                  <Link
-                    href={`/messages/${conversation.user._id}`}
-                    key={conversation.user._id}
-                    className="conversation-card"
-                  >
-
-                    {/* PROFILE IMAGE */}
-                    <div className="conversation-image">
-
-                      {conversation.user
-                        .profileImage ? (
-
-                        <img
-                          src={`/uploads/${conversation.user.profileImage}`}
-                          alt="Profile"
-                        />
-
-                      ) : (
-
-                        <span>
-                          👤
+                        <span className="message-person-name">
+                          {person.name}
                         </span>
-
-                      )}
-
-                    </div>
-
-
-                    {/* USER + LAST MESSAGE */}
-                    <div className="conversation-info">
-
-                      <strong>
-                        {conversation.user.name}{" "}
-                        {conversation.user.surname}
-                      </strong>
-
-                      <p>
-                        {
-                          conversation
-                            .lastMessage
-                            .content
-                        }
-                      </p>
-
-                    </div>
-
-                  </Link>
-
-                )
+                      </Link>
+                    ))}
+                  </div>
+                </section>
               )}
 
-            </div>
+              <section className="conversations-section">
+                {conversations.length === 0 && (
+                  <div className="empty-messages compact-empty-messages">
+                    <h3>Немате започнати разговори</h3>
+                    <p>Изберете корисник за да започнете разговор.</p>
+                  </div>
+                )}
 
-          </section>
+                <div className="conversations-list">
+                  {conversations.map(
+                    (conversation) => (
+                      <Link
+                        href={`/messages/${conversation.user._id}`}
+                        key={conversation.user._id}
+                        className="conversation-card"
+                      >
+                        <div className="conversation-image">
+                          {conversation.user.profileImage ? (
+                            <img
+                              src={`/uploads/${conversation.user.profileImage}`}
+                              alt="Profile"
+                            />
+                          ) : (
+                            <span>
+                              {conversation.user.name?.charAt(0)}{conversation.user.surname?.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="conversation-info">
+                          <div className="conversation-title-row">
+                            <strong>
+                              {conversation.user.name}{" "}
+                              {conversation.user.surname}
+                            </strong>
+
+                            {conversation.lastMessage?.createdAt && (
+                              <time>
+                                {new Date(
+                                  conversation.lastMessage.createdAt
+                                ).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </time>
+                            )}
+                          </div>
+
+                          <p>
+                            {conversation.lastMessage?.content ||
+                              "Започни разговор"}
+                          </p>
+                        </div>
+                      </Link>
+                    )
+                  )}
+                </div>
+              </section>
+
+            </aside>
+
+            <section className="messages-chat-panel messages-empty-panel">
+              <div className="messages-empty-state">
+                <span>
+                  <Icon name="message" />
+                </span>
+
+                <h2>Изберете разговор</h2>
+
+                <p>
+                  Изберете корисник за да започнете разговор.
+                </p>
+              </div>
+            </section>
+
+          </div>
 
         </div>
 

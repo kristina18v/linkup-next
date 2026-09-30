@@ -1,35 +1,83 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 
+const tabs = [
+  { id: "posts", label: "Објави" },
+  { id: "saved", label: "Зачувани" },
+  { id: "courses", label: "Курсеви" },
+  { id: "projects", label: "Проекти" },
+];
+
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [activeTab, setActiveTab] = useState("posts");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/auth/me", {
-      credentials: "include",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Не сте најавени");
+    async function loadProfile() {
+      try {
+        const userResponse = await fetch("/api/auth/me", {
+          credentials: "include",
+        });
+
+        const userData = await userResponse.json();
+
+        if (!userResponse.ok) {
+          throw new Error(userData.message || "Не сте најавени");
         }
 
-        return response.json();
-      })
-      .then((data) => {
-        setUser(data.user);
-        setLoading(false);
-      })
-      .catch((error) => {
+        const currentUser = userData.user;
+        setUser(currentUser);
+
+        const [postsResponse, coursesResponse, projectsResponse] =
+          await Promise.allSettled([
+            fetch("/api/posts/my", { credentials: "include" }),
+            fetch("/api/courses?limit=1000", { credentials: "include" }),
+            fetch("/api/project-requests/my-requests", {
+              credentials: "include",
+            }),
+          ]);
+
+        if (postsResponse.status === "fulfilled") {
+          const postsData = await postsResponse.value.json();
+          setPosts(Array.isArray(postsData) ? postsData : []);
+        }
+
+        if (coursesResponse.status === "fulfilled") {
+          const coursesData = await coursesResponse.value.json();
+          const allCourses = Array.isArray(coursesData)
+            ? coursesData
+            : coursesData.courses || [];
+
+          setCourses(
+            allCourses.filter(
+              (course) =>
+                course.instructor?._id === currentUser._id
+            )
+          );
+        }
+
+        if (projectsResponse.status === "fulfilled") {
+          const projectsData = await projectsResponse.value.json();
+          setProjects(Array.isArray(projectsData) ? projectsData : []);
+        }
+      } catch (error) {
         setError(error.message);
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+
+    loadProfile();
   }, []);
 
   function getRoleName(role) {
@@ -40,6 +88,18 @@ export default function ProfilePage() {
 
     return role;
   }
+
+  const savedCount = user?.savedPosts?.length || 0;
+
+  const tabCounts = useMemo(
+    () => ({
+      posts: posts.length,
+      saved: savedCount,
+      courses: courses.length,
+      projects: projects.length,
+    }),
+    [courses.length, posts.length, projects.length, savedCount]
+  );
 
   if (loading) {
     return (
@@ -67,334 +127,206 @@ export default function ProfilePage() {
 
   return (
     <main className="profile-layout">
-
       <Sidebar user={user} />
 
       <section className="profile-main">
-
         <Navbar user={user} />
 
-        <div className="profile-container">
-
-          {/* COVER IMAGE */}
-          <div className="profile-cover">
-
-            {user.coverImage ? (
-              <img
-                src={`/uploads/${user.coverImage}`}
-                alt="Cover"
-                className="cover-image"
-              />
-            ) : (
-              <div className="cover-placeholder">
-                Cover Image
-              </div>
-            )}
-
-          </div>
-
-
-          {/* PROFILE HEADER */}
-          <section className="profile-header">
-
-            {/* PROFILE IMAGE */}
-            <div className="profile-image-wrapper">
-
+        <div className="profile-container modern-profile-container">
+          <section className="modern-profile-header">
+            <div className="modern-profile-avatar-wrap">
               {user.profileImage ? (
                 <img
                   src={`/uploads/${user.profileImage}`}
                   alt={`${user.name} ${user.surname}`}
-                  className="profile-image"
+                  className="modern-profile-avatar"
                 />
               ) : (
-                <div className="profile-image-placeholder">
-                  👤
+                <div className="modern-profile-avatar modern-profile-avatar-placeholder">
+                  {user.name?.charAt(0)}{user.surname?.charAt(0)}
                 </div>
               )}
-
             </div>
 
+            <div className="modern-profile-body">
+              <div className="modern-profile-topline">
+                <div>
+                  <h1>{user.name} {user.surname}</h1>
+                  <p className="profile-role">{getRoleName(user.role)}</p>
+                </div>
 
-            {/* NAME + ROLE */}
-            <div className="profile-main-info">
+                <Link href="/profile/edit" className="edit-profile-button">
+                  Измени профил
+                </Link>
+              </div>
 
-              <h1>
-                {user.name} {user.surname}
-              </h1>
+              <div className="modern-profile-stats" aria-label="Профил статистика">
+                <div>
+                  <strong>{posts.length}</strong>
+                  <span>Објави</span>
+                </div>
 
-              <p className="profile-role">
-                {getRoleName(user.role)}
-              </p>
+                <div>
+                  <strong>{user.followers?.length || 0}</strong>
+                  <span>Следбеници</span>
+                </div>
 
-              {user.location && (
-                <p className="profile-location">
-                  📍 {user.location}
+                <div>
+                  <strong>{user.following?.length || 0}</strong>
+                  <span>Следи</span>
+                </div>
+              </div>
+
+              {user.bio ? (
+                <p className="modern-profile-bio">{user.bio}</p>
+              ) : (
+                <p className="modern-profile-bio empty-profile-data">
+                  Немате додадено опис.
                 </p>
               )}
 
+              {user.location && (
+                <p className="profile-location">📍 {user.location}</p>
+              )}
+
+              {(user.skills?.length > 0 || user.interests?.length > 0) && (
+                <div className="profile-tags modern-profile-tags">
+                  {[...(user.skills || []), ...(user.interests || [])]
+                    .slice(0, 8)
+                    .map((item, index) => (
+                      <span className="profile-tag" key={`${item}-${index}`}>
+                        {item}
+                      </span>
+                    ))}
+                </div>
+              )}
             </div>
-
-
-            <button className="edit-profile-button">
-              Измени профил
-            </button>
-
           </section>
 
+          <nav className="profile-tabs" aria-label="Профил секции">
+            {tabs.map((tab) => (
+              <button
+                type="button"
+                key={tab.id}
+                className={activeTab === tab.id ? "active" : ""}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <span>{tab.label}</span>
+                <strong>{tabCounts[tab.id]}</strong>
+              </button>
+            ))}
+          </nav>
 
-          {/* FOLLOWERS / FOLLOWING NUMBERS */}
-          <section className="profile-stats">
-
-            <div>
-              <strong>
-                {user.followers?.length || 0}
-              </strong>
-
-              <span>Следбеници</span>
-            </div>
-
-            <div>
-              <strong>
-                {user.following?.length || 0}
-              </strong>
-
-              <span>Следи</span>
-            </div>
-
-          </section>
-
-
-          {/* FOLLOWING USERS */}
-          <section className="profile-section">
-
-            <h2>Луѓе што ги следам</h2>
-
-            {!user.following ||
-            user.following.length === 0 ? (
-
-              <p className="empty-profile-data">
-                Не следите никого.
-              </p>
-
-            ) : (
-
-              <div className="profile-users-list">
-
-                {user.following.map((person) => (
-
-                  <div
-                    className="profile-user-card"
-                    key={person._id}
-                  >
-
-                    <div className="profile-user-info">
-
-                      {person.profileImage ? (
+          <section className="profile-tab-panel">
+            {activeTab === "posts" && (
+              posts.length > 0 ? (
+                <div className="profile-post-grid">
+                  {posts.map((post) => (
+                    <Link
+                      href={`/posts/${post._id}`}
+                      className={
+                        post.images?.length > 0
+                          ? "profile-grid-post has-image"
+                          : "profile-grid-post"
+                      }
+                      key={post._id}
+                    >
+                      {post.images?.length > 0 ? (
                         <img
-                          src={`/uploads/${person.profileImage}`}
-                          alt={`${person.name} ${person.surname}`}
-                          className="profile-user-image"
+                          src={`/uploads/${post.images[0]}`}
+                          alt="Објава"
                         />
                       ) : (
-                        <div className="profile-user-placeholder">
-                          👤
+                        <div className="profile-grid-text-post">
+                          <p>{post.content}</p>
                         </div>
                       )}
 
-                      <div>
-                        <strong>
-                          {person.name} {person.surname}
-                        </strong>
-
-                        <span>
-                          {getRoleName(person.role)}
-                        </span>
+                      <div className="profile-post-hover">
+                        <span>♥ {post.likes?.length || 0}</span>
+                        <span>💬</span>
                       </div>
-
-                    </div>
-
-                    <Link
-                      href={`/messages/${person._id}`}
-                      className="profile-message-button"
-                    >
-                      💬 Порака
                     </Link>
-
-                  </div>
-
-                ))}
-
-              </div>
-
+                  ))}
+                </div>
+              ) : (
+                <div className="profile-empty-state">
+                  <h2>Нема објави</h2>
+                  <p>Вашите објави ќе се прикажат тука.</p>
+                </div>
+              )
             )}
 
-          </section>
+            {activeTab === "saved" && (
+              <div className="profile-empty-state">
+                <h2>Зачувани</h2>
+                <p>
+                  {savedCount > 0
+                    ? `Имате ${savedCount} зачувани објави.`
+                    : "Немате зачувани објави."}
+                </p>
+              </div>
+            )}
 
-
-          {/* FOLLOWERS USERS */}
-          <section className="profile-section">
-
-            <h2>Следбеници</h2>
-
-            {!user.followers ||
-            user.followers.length === 0 ? (
-
-              <p className="empty-profile-data">
-                Немате следбеници.
-              </p>
-
-            ) : (
-
-              <div className="profile-users-list">
-
-                {user.followers.map((person) => (
-
-                  <div
-                    className="profile-user-card"
-                    key={person._id}
-                  >
-
-                    <div className="profile-user-info">
-
-                      {person.profileImage ? (
+            {activeTab === "courses" && (
+              courses.length > 0 ? (
+                <div className="profile-compact-list">
+                  {courses.map((course) => (
+                    <Link
+                      href={`/courses/${course._id}`}
+                      className="profile-compact-item"
+                      key={course._id}
+                    >
+                      {course.coverImage && (
                         <img
-                          src={`/uploads/${person.profileImage}`}
-                          alt={`${person.name} ${person.surname}`}
-                          className="profile-user-image"
+                          src={`/uploads/${course.coverImage}`}
+                          alt={course.title}
                         />
-                      ) : (
-                        <div className="profile-user-placeholder">
-                          👤
-                        </div>
                       )}
 
                       <div>
-                        <strong>
-                          {person.name} {person.surname}
-                        </strong>
-
-                        <span>
-                          {getRoleName(person.role)}
-                        </span>
+                        <h2>{course.title}</h2>
+                        <p>{course.category} · {course.level}</p>
                       </div>
-
-                    </div>
-
-                    <Link
-                      href={`/messages/${person._id}`}
-                      className="profile-message-button"
-                    >
-                      💬 Порака
                     </Link>
-
-                  </div>
-
-                ))}
-
-              </div>
-
+                  ))}
+                </div>
+              ) : (
+                <div className="profile-empty-state">
+                  <h2>Нема курсеви</h2>
+                  <p>Курсевите што ги креирате ќе се прикажат тука.</p>
+                </div>
+              )
             )}
 
-          </section>
-
-
-          {/* BIO */}
-          <section className="profile-section">
-
-            <h2>За мене</h2>
-
-            {user.bio ? (
-              <p>{user.bio}</p>
-            ) : (
-              <p className="empty-profile-data">
-                Немате додадено опис.
-              </p>
+            {activeTab === "projects" && (
+              projects.length > 0 ? (
+                <div className="profile-compact-list">
+                  {projects.map((project) => (
+                    <Link
+                      href={`/project-requests/${project._id}`}
+                      className="profile-compact-item"
+                      key={project._id}
+                    >
+                      <div>
+                        <h2>{project.title}</h2>
+                        <p>{project.category} · {project.status}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="profile-empty-state">
+                  <h2>Нема проекти</h2>
+                  <p>Проектите што ги креирате ќе се прикажат тука.</p>
+                </div>
+              )
             )}
-
           </section>
-
-
-          {/* LOCATION */}
-          <section className="profile-section">
-
-            <h2>Локација</h2>
-
-            {user.location ? (
-              <p>📍 {user.location}</p>
-            ) : (
-              <p className="empty-profile-data">
-                Немате додадено локација.
-              </p>
-            )}
-
-          </section>
-
-
-          {/* SKILLS */}
-          <section className="profile-section">
-
-            <h2>Вештини</h2>
-
-            {user.skills?.length > 0 ? (
-
-              <div className="profile-tags">
-
-                {user.skills.map((skill, index) => (
-                  <span
-                    className="profile-tag"
-                    key={index}
-                  >
-                    {skill}
-                  </span>
-                ))}
-
-              </div>
-
-            ) : (
-
-              <p className="empty-profile-data">
-                Немате додадено вештини.
-              </p>
-
-            )}
-
-          </section>
-
-
-          {/* INTERESTS */}
-          <section className="profile-section">
-
-            <h2>Интереси</h2>
-
-            {user.interests?.length > 0 ? (
-
-              <div className="profile-tags">
-
-                {user.interests.map((interest, index) => (
-                  <span
-                    className="profile-tag"
-                    key={index}
-                  >
-                    {interest}
-                  </span>
-                ))}
-
-              </div>
-
-            ) : (
-
-              <p className="empty-profile-data">
-                Немате додадено интереси.
-              </p>
-
-            )}
-
-          </section>
-
         </div>
-
       </section>
-
     </main>
   );
 }
+
+

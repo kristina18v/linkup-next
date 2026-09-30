@@ -46,8 +46,15 @@ export async function POST(request, { params }) {
       });
     }
 
+    const populatedSharedPost = await Post.findById(
+      sharedPost._id
+    ).populate(
+      "author",
+      "name surname role profileImage"
+    );
+
     return Response.json(
-      sharedPost,
+      populatedSharedPost,
       { status: 201 }
     );
 

@@ -22,7 +22,7 @@ export async function GET(request) {
       post: postId,
     })
       .sort({ createdAt: 1 })
-      .populate("author", "name surname role");
+      .populate("author", "name surname role profileImage");
 
     return Response.json(comments, {
       status: 200,
@@ -82,7 +82,7 @@ export async function POST(request) {
 
     const populatedComment = await Comment.findById(
       newComment._id
-    ).populate("author", "name surname role");
+    ).populate("author", "name surname role profileImage");
 
     return Response.json(populatedComment, {
       status: 201,

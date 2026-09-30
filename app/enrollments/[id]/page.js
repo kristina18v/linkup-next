@@ -23,9 +23,9 @@ export default function EnrollmentDetailsPage() {
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => {
-        setUser(data);
-      })
+     .then((data) => {
+    setUser(data.user);
+    })
       .catch((error) => {
         console.log(error);
       });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Icon from "@/components/Icon";
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -26,8 +27,9 @@ export default function LogoutButton() {
   }
 
   return (
-    <button onClick={handleLogout}>
-      Одјави се
+    <button onClick={handleLogout} title="Одјави се" aria-label="Одјави се">
+      <Icon name="share" />
+      <span>Одјави се</span>
     </button>
   );
 }
